@@ -1,1 +1,6 @@
-/* No CSS *//*# sourceMappingURL=style.css.map */
+@media (min-width: 1000px) {
+  body {
+    margin: 0;
+  }
+}
+/*# sourceMappingURL=style.css.map */
