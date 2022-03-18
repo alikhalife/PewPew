@@ -90,10 +90,10 @@ function animate() {
 
     player.update(); // calling the image
 
-    if (keys.ArrowLeft.pressed) {
+    if (keys.ArrowLeft.pressed && player.positiion.x >= 0) {
         player.velocity.x = -5;
     }
-    else if (keys.ArrowRight.pressed) {
+    else if (keys.ArrowRight.pressed && player.positiion.x + player.width <= canvas.width) {
         player.velocity.x = 5;
     }
     else {
