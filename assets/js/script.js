@@ -97,6 +97,37 @@ class Projectile {
     }
 }
 
+//WHEN INVADERS EXPLODE
+class Particle {
+    constructor({ position, velocity, radius, color }) {
+        this.position = position;
+        this.velocity = velocity;
+        this.radius = radius;
+        this.color = color;
+        this.opacity = 1;
+    }
+
+    draw() {
+        context.save()
+        context.globalalpha = this.opacity
+        context.beginPath()
+        context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+
+        context.fillStyle = this.color
+        context.fill()
+        context.closePath()
+
+        context.restore()
+    }
+
+    update() {
+        this.draw()
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
+        this.opacity -= 0.01
+    }
+}
+
 //INVADERS PROJECTILES
 class InvaderProjectile {
     constructor({ position, velocity }) {
@@ -127,8 +158,6 @@ class Invader {
             x: 0,
             y: 0,
         }
-
-
         const image = new Image();
         image.src = "./assets/img/invader.png"
 
@@ -158,7 +187,6 @@ class Invader {
             this.width,
             this.height
         )
-
     }
 
     update({velocity}) {
@@ -166,7 +194,6 @@ class Invader {
             this.draw()
             this.position.x += velocity.x;
             this.position.y += velocity.y;
-
         }
     }
 
@@ -234,6 +261,7 @@ const player = new Player();
 const projectiles = [];
 const grids = [];
 const invaderProjectiles = [];
+const particles = [];
 
 const keys = {
     ArrowLeft: {
@@ -250,6 +278,22 @@ const keys = {
 let frames = 0;
 let randomInterval = Math.floor(Math.random() * 500) + 500;
 
+function createParticles({object, color}) {
+    for(let i= 0; i < 15; i++) {
+        particles.push(new Particle({
+            position:{
+                x:object.position.x + object.width / 2,
+                y:object.position.y + object.height / 2
+            },
+            velocity:  {
+                x: (Math.random() - 0.5) * 2,
+                y: (Math.random() - 0.5) * 2
+            },
+            radius: Math.random() * 3,
+            color: color || '#BAA0DE'
+        }))
+    }
+}
 
 // ANIMATION
 function animate() {
@@ -259,20 +303,45 @@ function animate() {
     context.fillStyle = "black"
     context.fillRect(0, 0, canvas.width, canvas.height)
     player.update(); // calling the image
+    particles.forEach((particle, i) => {
+        if(particle.opacity <= 0){
+            setTimeout(()=> {
+                particles.splice(i, 1)
+            }, 0)
+        }
+        else {
+            particle.update() //this will render particles
+        }
+        
+    })
+
+console.log(particles)
+    //removing invader projectiles so that they are not stored and they don't slow the game
     invaderProjectiles.forEach((invaderProjectile, index) =>{
         if (invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
             setTimeout(() => {
                 invaderProjectiles.splice(index, 1)
-            })
+            }, 0)
         } else {invaderProjectile.update()}
 
+        //when an invader projectile hits player this will mark that player lost
         if(invaderProjectile.position.y + invaderProjectile.height >= player.position.y &&
             invaderProjectile.position.x + invaderProjectile.width >= player.position.x &&
             invaderProjectile.position.x <= player.position.x + player.width
             ) {
+            setTimeout(() => {
+                invaderProjectiles.splice(index, 1)
+            }, 0)
             console.log("you lose")
+
+            createParticles({
+                object: player,
+                color: "white"
+            })
         }
     })
+
+    //projectiles hit invaders
     projectiles.forEach((projectile, index) => {
         if (projectile.position.y + projectile.radius <= 0) {
             setTimeout(() => {
@@ -312,6 +381,9 @@ function animate() {
                             
                             //REMOVE INVADER AND PROJECTILE
                             if(invaderFound && projectileFound) {
+                            createParticles({
+                                object: invader
+                            })
                             grid.invaders.splice(i, 1)
                             projectiles.splice(j, 1)
 
