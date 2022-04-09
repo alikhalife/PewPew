@@ -2,8 +2,29 @@
     body {
         margin: 0;
     }
+
+    p {
+        position: fixed;
+        z-index: 10;
+        color: white;
+        left: 10px;
+        top: 10px;
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 14px;
+    }
 }
 
 @media (min-width: 300px) and (max-width: 1000px) {
-    
+    p {
+        position: fixed;
+        z-index: 10;
+        color: white;
+        left: 10px;
+        top: 10px;
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 14px;
+
+    }
 }

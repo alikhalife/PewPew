@@ -2,11 +2,10 @@
 // CREATING CANVAS
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext("2d");
-
+const scoreEl = document.querySelector("#scoreEl")
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-
 
 
 //SPACESHIP
@@ -286,6 +285,8 @@ let game = {
     active: true
 }
 
+let score = 0;
+
 for(let i= 0; i < 100; i++) {
     particles.push(new Particle({
         position:{
@@ -420,6 +421,10 @@ function animate() {
                             
                             //REMOVE INVADER AND PROJECTILE
                             if(invaderFound && projectileFound) {
+                                score += 100
+                                console.log(score)
+                                scoreEl.innerHTML = score
+
                             createParticles({
                                 object: invader,
                                 fades: true
