@@ -18,6 +18,7 @@ class Player {
         }
 
         this.rotation = 0;
+        this.opacity = 1;
 
         const image = new Image();
         image.src = "./assets/img/spaceship.png"
@@ -41,6 +42,8 @@ class Player {
         // context.fillStyle = "red";
         // context.fillRect(this.positiion.x, this.positiion.y, this.width, this.height)
         context.save()
+
+        context.globalAlpha = this.opacity
 
         context.translate(
             player.position.x + player.width / 2,
@@ -110,7 +113,6 @@ class Particle {
 
     draw() {
         context.save()
-        context.globalalpha = this.opacity
         context.beginPath()
         context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
 
@@ -279,6 +281,10 @@ const keys = {
 
 let frames = 0;
 let randomInterval = Math.floor(Math.random() * 500) + 500;
+let game = {
+    over: false,
+    active: true
+}
 
 for(let i= 0; i < 100; i++) {
     particles.push(new Particle({
@@ -315,6 +321,8 @@ function createParticles({object, color, fades}) {
 
 // ANIMATION
 function animate() {
+    if(!game.active) return
+
     requestAnimationFrame(animate); // looping on image so that it appears on browser
 
     //changing bg colour to black
@@ -338,7 +346,7 @@ function animate() {
         
     })
 
-console.log(particles)
+
     //removing invader projectiles so that they are not stored and they don't slow the game
     invaderProjectiles.forEach((invaderProjectile, index) =>{
         if (invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
@@ -352,10 +360,17 @@ console.log(particles)
             invaderProjectile.position.x + invaderProjectile.width >= player.position.x &&
             invaderProjectile.position.x <= player.position.x + player.width
             ) {
+            console.log("you lose")
+
             setTimeout(() => {
                 invaderProjectiles.splice(index, 1)
+                player.opacity = 0
+                game.over = true 
             }, 0)
-            console.log("you lose")
+
+            setTimeout(() => {
+                game.active = false
+            }, 2000)
 
             createParticles({
                 object: player,
@@ -449,7 +464,7 @@ console.log(particles)
         grids.push(new Grid())
         randomInterval = Math.floor(Math.random() * 500) + 500;
         frames = 0
-        console.log(randomInterval)
+        // console.log(randomInterval)
     }
 
     frames ++
@@ -462,6 +477,7 @@ animate();
 
 //moving player
 addEventListener("keydown", ({ key }) => {
+    if (game.over) return
     switch (key) {
         case "ArrowLeft":
             // console.log("left")
