@@ -1,29 +1,29 @@
-@media (min-width: 1000px) {
-  body {
-    margin: 0;
-  }
-  p {
-    position: fixed;
-    z-index: 10;
-    color: white;
-    left: 10px;
-    top: 10px;
-    margin: 0;
-    font-family: sans-serif;
-    font-size: 14px;
-  }
+body {
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: black;
 }
 
-@media (min-width: 300px) and (max-width: 1000px) {
-  p {
-    position: fixed;
-    z-index: 10;
-    color: white;
-    left: 10px;
-    top: 10px;
-    margin: 0;
-    font-family: sans-serif;
-    font-size: 14px;
-  }
+div {
+  position: relative;
+}
+
+p {
+  position: absolute;
+  z-index: 10;
+  color: white;
+  left: 10px;
+  top: 10px;
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 14px;
 }
 /*# sourceMappingURL=style.css.map */
