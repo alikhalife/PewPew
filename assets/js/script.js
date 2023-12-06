@@ -534,3 +534,48 @@ addEventListener("keyup", ({ key }) => {
     }
 
 })
+
+// Function to restart the game
+function restartGame() {
+    // Reset all variables
+    player.position.x = canvas.width / 2 - player.width / 2;
+    player.position.y = canvas.height - player.height - 50;
+    player.opacity = 1;
+    game.over = false;
+    game.active = true;
+    score = 0;
+    scoreEl.innerHTML = score;
+
+    // Clear existing projectiles, invaders, and grids
+    projectiles.length = 0;
+    invaderProjectiles.length = 0;
+    grids.length = 0;
+
+    // Reset player rotation and velocity
+    player.rotation = 0;
+    player.velocity.x = 0;
+
+    // Restart animation loop
+    animate();
+}
+
+// Function to handle key events for restarting the game
+function handleRestartKey({ key }) {
+    if (key === "" && game.over) {
+        restartGame();
+    }
+}
+
+// Event listener for key events related to restarting the game
+addEventListener("keydown", handleRestartKey);
+
+
+// Function to handle button click for restarting the game
+  function handleRestartButtonClick() {
+    if (game.over) {
+      restartGame();
+    }
+  }
+
+  // Event listener for button click to restart the game
+  document.getElementById("restartButton").addEventListener("click", handleRestartButtonClick);
